@@ -42,7 +42,7 @@ public class Endpoint {
 	}
 
 	@PostMapping("/")
-	public Object listExpensesFor(@RequestBody ListRequest request) {
+	public Period listExpensesFor(@RequestBody ListRequest request) {
 		return service.periodFor(new ListPeriodForm(new TransactionDate(request.getStartDate()),
 								 new TransactionDate(request.getEndDate()),
 								 new UserId(request.getUserId())));

@@ -10,6 +10,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -25,13 +29,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "tag")
 public class Tag implements Serializable {
 
 	/**
@@ -53,10 +56,10 @@ public class Tag implements Serializable {
 //	private List<Transaction> transactions;
 	
 	@JsonManagedReference
-	@OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, mappedBy = "tag")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "tag")
 	private List<Transaction> transactions;	
 
-	
+	@ToString.Exclude
 	@JsonBackReference
 //	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -90,30 +93,26 @@ public class Tag implements Serializable {
 	
 	public void recordRecivedAndModifyAllocation(String description, TransactionDate date, Money money) {
 
-		// create transaction
 		Transaction tranx = new Transaction(money, description, date, TransactionType.RECEIVED, this);
 		
-		tranx.setTag(this);
-
-		// add transaction in tag
 		transactions.add(tranx);
 
 		tagAmount = new Money(tagAmount).add(money).fixedPointAmount();
 	}
 
-	public boolean equals(Object o) {
-		if (o == this) {
-			return true;
-		}
-		if (o == null || o.getClass() != getClass()) {
-			return false;
-		}
-		return tagName.equals(((Tag) o).tagName);
-	}
-
-	public int hashCode() {
-		return Objects.hash(tagName);
-	}
+//	public boolean equals(Object o) {
+//		if (o == this) {
+//			return true;
+//		}
+//		if (o == null || o.getClass() != getClass()) {
+//			return false;
+//		}
+//		return tagId.equals(((Tag) o).tagId);
+//	}
+//
+//	public int hashCode() {
+//		return Objects.hash(tagId);
+//	}
 
 	public String tag() {
 		return tagName;

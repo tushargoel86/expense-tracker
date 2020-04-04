@@ -5,19 +5,21 @@ import java.util.Objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 public class TransactionId  implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final String id;
+	private String id;
 
+	
 	public boolean equals(Object o) {
 		if (o == this) {
 			return true;
@@ -36,6 +38,10 @@ public class TransactionId  implements Serializable {
 	@Override
 	public String toString() {
 		return id;
+	}
+
+	public TransactionId(String id) {
+		this.id = id;
 	}
 
 }

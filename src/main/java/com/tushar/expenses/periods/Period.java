@@ -1,8 +1,8 @@
 package com.tushar.expenses.periods;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -24,6 +24,7 @@ import com.tushar.expenses.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -41,8 +42,9 @@ public class Period implements Serializable {
 	@Type(type = "com.tushar.expenses.periods.PeriodIdType")
 	private PeriodId periodId;
 
+	@ToString.Exclude
 	@JsonBackReference
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private User user;
 
@@ -57,18 +59,18 @@ public class Period implements Serializable {
 //	@JsonManagedReference
 //	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST,
 //			CascadeType.REFRESH }, orphanRemoval = true, fetch = FetchType.EAGER, mappedBy = "period")
-//	private Set<Tag> tags;
+//private List<Tag> tags;
 
 	@JsonManagedReference
-	@OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, mappedBy = "period")
-	private Set<Tag> tags;	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "period")
+	private List<Tag> tags;	
 	
 	public Period(User user, TransactionDate fromDate, TransactionDate toDate) {
 		this.user = user;
 		this.fromDate = fromDate;
 		this.toDate = toDate;
 		this.periodId = new PeriodId(UUID.randomUUID().toString());
-		this.tags = new HashSet<>();
+		this.tags = new ArrayList<>();
 	}
 
 	public void recordExpensesOrReceived(Tag tag, TransactionType transactionType, String description, Money money,

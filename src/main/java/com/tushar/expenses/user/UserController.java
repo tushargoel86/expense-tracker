@@ -24,7 +24,7 @@ public class UserController {
 			Optional<User> existsByUserName = UserRepository.existsByUserName(user.getUserName());
 			if (existsByUserName.isPresent()) throw new UserAlreadyRegistered();
 			User usr = UserRepository.save(user);
-			return new ResponseEntity<String>(usr.getUserId().toString(), HttpStatus.CREATED);	
+			return new ResponseEntity<String>(usr.getUserId().toString(), HttpStatus.CREATED) ;	
 		} catch (Exception e) {
 			return new ResponseEntity<String>("user details required",  HttpStatus.PRECONDITION_FAILED);
 		}

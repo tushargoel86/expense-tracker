@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
@@ -17,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -26,7 +30,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Getter
+	@Getter
 @Setter
 @NoArgsConstructor
 @Table(name="transaction")
@@ -41,7 +45,9 @@ public class Transaction implements Serializable {
 	@Type(type = "com.tushar.expenses.periods.TransactionIdType")
 	@Column(name = "transaction_id")
 	private TransactionId transactionId;
-
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//private int transactionId;
+	
 	@Column(name="amount")
 	private int money;
 
@@ -56,11 +62,12 @@ public class Transaction implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private TransactionType transactionType;
 	
-//	@JsonBackReference
+	@ToString.Exclude
+	@JsonBackReference
 //	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 //	@JoinColumn(name = "tag_id")
-	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY)
+//	@JsonBackReference
+	@ManyToOne
 	@JoinColumn(name = "tag_id")
 	private Tag tag;
 	
@@ -100,17 +107,5 @@ public class Transaction implements Serializable {
 		this.transactionType = transactionType;
 	}
 	
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (o == null || o.getClass() != getClass()) {
-            return false;
-        }
-        return transactionId.equals(((Transaction) o).transactionId);
-    }
-
-    public int hashCode() {
-        return transactionId.hashCode();
-    }
+    
 }

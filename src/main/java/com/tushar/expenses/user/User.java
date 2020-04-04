@@ -16,6 +16,7 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tushar.expenses.periods.Period;
 
 import lombok.AllArgsConstructor;
@@ -34,6 +35,7 @@ public class User {
 	@Id
 	@Column(name = "user_id")
 	@Type(type = "com.tushar.expenses.user.UserIdType")
+	@JsonProperty("userId")
 	private UserId userId;
 	
 	@Column
@@ -43,7 +45,7 @@ public class User {
 	private String email;
 	
 	@JsonManagedReference
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
 	//@JoinColumn(name = "periodId")
 	private List<Period> periods;
 

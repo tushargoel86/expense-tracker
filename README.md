@@ -4,9 +4,9 @@ Expense tracking app to track the expenses
 
 Technology used:
 React & Hooks,
-React-Bootstrap
-Java & Spring Boot
-PostgressSQL
+React-Bootstrap,
+Java & Spring Boot,
+PostgressSQL,
 
 GUI:
 
@@ -23,7 +23,7 @@ POST : http://localhost:9090/user
 ```
 {
 	"userName": "Tushar Goel",
-	"email": "tushar@gmail.com"
+	"email": "tushargoel86@gmail.com"
 }
 ```
 
@@ -64,3 +64,4 @@ Further Improvements:
 1) Add Login page
 2) Authentication using openid
 3) Deploy on AWS
+4) Convert into microservices
